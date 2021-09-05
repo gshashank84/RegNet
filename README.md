@@ -8,38 +8,38 @@ Below is the short summary of the reference paper:
 - - - - - - - - 
 
 
-- Network:
- - stem
- - body 
- - head
+- Network: 
+  - stem
+  - body 
+  - head
  
 - body:
- - stage1
- - stage2
- - stage3
- - stage4
+  - stage1
+  - stage2
+  - stage3
+  - stage4
  
 - stagei
- - block1
- - block2
- - block3
- - ...
- - blockdi
- 
+  - block1
+  - block2
+  - block3
+  - ...
+  - blockdi
+
 - stem
- - 3x3 Conv stride=2 filters=w0 (32)
+  - 3x3 Conv stride=2 filters=w0 (32)
  
 - head 
- - AvgPool
- - Dense units=n (for n classes)
+  - AvgPool
+  - Dense units=n (for n classes)
 
 - stage parameter
- - number of blocks **di**
+  - number of blocks **di**
 
 - block parameters
- - width **wi**
- - bottleneck ration **bi**
- - group width **gi**
+  - width **wi**
+  - bottleneck ration **bi**
+  - group width **gi**
  
 
 - All the blocks are identical except the first block
@@ -51,51 +51,51 @@ Below is the short summary of the reference paper:
 - - - - -- 
 
 - AnyNetXa:
- - any possible model within its parameters combinations
+  - any possible model within its parameters combinations
  
 - AnyNetXb:
- - bottleneck ratio **bi** is fixed across all stages
+  - bottleneck ratio **bi** is fixed across all stages
  
 - AnyNetXc:
- - group width **gi** is fixed across all stages
+  - group width **gi** is fixed across all stages
  
 - AnyNetXd:
- - stage width wi+1 is greater than previous width wi
+  - stage width wi+1 is greater than previous width wi
  
 - AnyNetXe:
- - stage depth di+1 is greater than previous depth di
+  - stage depth di+1 is greater than previous depth di
  
 - RegNet:
- - per block width wj, where j is index of blocks. 
- - observations:
-   - found that good models in design space have linear fit for block width wj with their position j
-   - wj = 48*(j+1) for 0<=j<=20
- - Proposed approach:
-   - d total depth, j index of block position
-   - uj = w0 + wa*j  for 0<=j<d (Eqn1)
-   - w0 is initial width (>0)
-   - wa slope (>0)
-   - we introduce another additional parameter wm (>0)
-   - given uj, wm now find value of sj such that it satisfies the following eqn
-   - uj = w0* (wm)**sj (Eq2)
-   - compute sj for each block j
-   - to quantize wj we round off sj
-   - i.e. [sj] (rounded off)
-   - Now we compute per block width wj by
-   - wj = w0* (wm)**[sj] (Eqn3)
-  - 6 parameters:
-    - d, w0, wa, wm, b, g
-  - Sampled models have constraints:
-    - d < 64
-    - w0, wa < 256
-    - 1.5 <= wm <= 3
-    - b <= 2
-    - g > 1
-   - good model observed parameters:
-     - wm =2 
-     - w0 = wa
-     - observation that the third stage has higher number of blocks whereas the last stage has smaller number of blocks.
-     - g increases with more large models, whereas the d saturates for large models.
+  - per block width wj, where j is index of blocks. 
+  - observations:
+    - found that good models in design space have linear fit for block width wj with their position j
+    - wj = 48*(j+1) for 0<=j<=20
+  - Proposed approach:
+    - d total depth, j index of block position
+    - uj = w0 + wa*j  for 0<=j<d (Eqn1)
+    - w0 is initial width (>0)
+    - wa slope (>0)
+    - we introduce another additional parameter wm (>0)
+    - given uj, wm now find value of sj such that it satisfies the following eqn
+    - uj = w0* (wm)**sj (Eq2)
+    - compute sj for each block j
+    - to quantize wj we round off sj
+    - i.e. [sj] (rounded off)
+    - Now we compute per block width wj by
+    - wj = w0* (wm)**[sj] (Eqn3)
+   - 6 parameters:
+     - d, w0, wa, wm, b, g
+   - Sampled models have constraints:
+     - d < 64
+     - w0, wa < 256
+     - 1.5 <= wm <= 3
+     - b <= 2
+     - g > 1
+    - good model observed parameters:
+      - wm =2 
+      - w0 = wa
+      - observation that the third stage has higher number of blocks whereas the last stage has smaller number of blocks.
+      - g increases with more large models, whereas the d saturates for large models.
  - RegNetX-200MF
      - di = [1,1,4,7]
      - wi = [24,56,152,368]
